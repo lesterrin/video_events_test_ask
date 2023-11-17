@@ -1,12 +1,12 @@
 import React from 'react';
 import './app.css';
 import EventsListContainer from "../events-list/events-list-container";
-import VideoPlayer from "../video-player/video-player";
+import VideoPlayerContainer from "../video-player/video-player-container";
 
 function App() {
   return (
       <>
-        <VideoPlayer/>
+        <VideoPlayerContainer/>
         <EventsListContainer/>
       </>
   );

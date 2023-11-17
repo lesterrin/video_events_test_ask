@@ -1,9 +1,9 @@
 import React from "react";
 import s from './events-list.module.css';
 
-const EventsList = () => {
+const EventsList: any = ({eventsList}: any): any => {
     return (
-        <div>EventsList</div>
+        <div>{eventsList}</div>
     )
 }
 
