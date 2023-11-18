@@ -3,8 +3,10 @@ import EventsList from "./events-list";
 import {requestEventsList} from "../../redux/events-list-reducer";
 import {connect} from "react-redux";
 import EventsListItem from "./events-list-item/events-list-item";
+import {getEventsList} from "../../redux/events-list-selectors";
+import Loader from "../loader/loader";
 
-const EventsListContainer: FC<PropsType> = ({eventsList,requestEventsList}) => {
+const EventsListContainer: FC<PropsType> = ({eventsList, isFetching, requestEventsList}) => {
 
     useEffect(() => {
         requestEventsList();
@@ -15,19 +17,25 @@ const EventsListContainer: FC<PropsType> = ({eventsList,requestEventsList}) => {
     eventsList = eventsList.map(item => <EventsListItem {...item} />);
 
     return (
-        <EventsList eventsList={eventsList}/>
+        isFetching ? <Loader/> : <EventsList eventsList={eventsList}/>
     );
 }
 
-const mapStateToProps = ({eventsList}:any): MapStatePropsType => (eventsList);
+const mapStateToProps = (state:any): MapStateToPropsType => {
+    return {
+        eventsList: getEventsList(state),
+        isFetching: state.eventsList.isFetching
+    };
+};
 
-type PropsType = MapStatePropsType & MapDispatchPropsType;
+type PropsType = MapStateToPropsType & MapDispatchToPropsType;
 
-type MapStatePropsType = {
+type MapStateToPropsType = {
     eventsList: Array<any>,
+    isFetching: boolean
 }
 
-type MapDispatchPropsType = {
+type MapDispatchToPropsType = {
     requestEventsList: () => void;
 }
 

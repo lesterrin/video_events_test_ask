@@ -4,7 +4,7 @@ const SET_EVENTS_LIST = "eventsList/SET-EVENTS-LIST";
 const TOGGLE_IS_FETCHING = "eventsList/TOGGLE-IS-FETCHING";
 
 const initialState = {
-    eventsList: [] as Array<{}>,
+    eventsListData: [] as Array<{}>,
     isFetching: false as boolean
 };
 
@@ -13,7 +13,7 @@ const eventsListReducer = (state = initialState, action: any): initialStateType 
         case SET_EVENTS_LIST:
             return {
                 ...state,
-                eventsList: action.eventsList
+                eventsListData: [...action.eventsListData]
             }
 
         case TOGGLE_IS_FETCHING:
@@ -27,7 +27,7 @@ const eventsListReducer = (state = initialState, action: any): initialStateType 
     }
 }
 
-export const setEventsList = (eventsList: any) => ({type: SET_EVENTS_LIST, eventsList});
+export const setEventsList = (eventsListData: any) => ({type: SET_EVENTS_LIST, eventsListData});
 export const toggleIsFetching = (isFetching: boolean) => ({type: TOGGLE_IS_FETCHING, isFetching});
 
 export const requestEventsList = (): any =>
