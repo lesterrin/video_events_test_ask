@@ -1,8 +1,10 @@
 import React from "react";
+import s from "./events-list-item.module.css";
 
-const EventsListItem = ({timestamp, duration, zone: {height, left, top, width}}:any) => {
+const EventsListItem = ({setTimestamp, sourceTimestamp, timestamp, duration, zone: {height, left, top, width}}:any) => {
+
     return(
-        <div>Метка: {timestamp} | Продолжительность: {duration} | Площадь: {height}x{width} | Положение {top}x{left}</div>
+        <div className={s.hand} onClick={()=>setTimestamp(sourceTimestamp)}>Метка: {timestamp} | Продолжительность: {duration} | Площадь: {height}x{width} | Положение {top}x{left}</div>
     )
 }
 

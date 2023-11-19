@@ -5,16 +5,15 @@ import {connect} from "react-redux";
 import EventsListItem from "./events-list-item/events-list-item";
 import {getEventsList} from "../../redux/events-list-selectors";
 import Loader from "../loader/loader";
+import {setTimestamp} from "../../redux/video-player-reducer";
 
-const EventsListContainer: FC<PropsType> = ({eventsList, isFetching, requestEventsList}) => {
+const EventsListContainer: FC<PropsType> = ({eventsList, isFetching, requestEventsList, setTimestamp}) => {
 
     useEffect(() => {
         requestEventsList();
     }, []);
 
-    console.log(eventsList);
-
-    eventsList = eventsList.map(item => <EventsListItem {...item} />);
+    eventsList = eventsList.map((item, i) => <EventsListItem key={i} {...item} setTimestamp={setTimestamp}/>);
 
     return (
         isFetching ? <Loader/> : <EventsList eventsList={eventsList}/>
@@ -36,7 +35,8 @@ type MapStateToPropsType = {
 }
 
 type MapDispatchToPropsType = {
-    requestEventsList: () => void;
+    requestEventsList: () => void,
+    setTimestamp: (timestamp: number) => void
 }
 
-export default connect(mapStateToProps,{requestEventsList})(EventsListContainer);
+export default connect(mapStateToProps,{requestEventsList,setTimestamp})(EventsListContainer);

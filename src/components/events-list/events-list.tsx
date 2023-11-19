@@ -1,7 +1,7 @@
-import React from "react";
+import React, {FC} from "react";
 import s from './events-list.module.css';
 
-const EventsList: any = ({eventsList}: any): any => {
+const EventsList: FC<any> = ({eventsList}) => {
     return (
         <div>{eventsList}</div>
     )
