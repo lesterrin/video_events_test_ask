@@ -3,7 +3,7 @@ import s from './events-list.module.css';
 
 const EventsList: FC<any> = ({eventsList}) => {
     return (
-        <div>{eventsList}</div>
+        <div className={s.eventsListTable}>{eventsList}</div>
     )
 }
 

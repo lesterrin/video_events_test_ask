@@ -1,0 +1,25 @@
+.videoPlayerComponentWrapper{
+    text-align: center;
+}
+
+.videoPlayerWrapper{
+    width: fit-content;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.videoPlayerWrapper video{
+    /*width: 600px;*/
+}
+
+.exRect {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border: #00ff07 3px solid;
+}
+
+.activeEventsList{
+    padding: 10px;
+    background-color: #008000;
+}

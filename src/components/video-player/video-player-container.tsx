@@ -1,7 +1,7 @@
 import React, {FC} from "react";
 import VideoPlayer from "./video-player";
 import {connect} from "react-redux";
-import {setTimestamp, togglePlay} from "../../redux/video-player-reducer";
+import {setActiveEvents, setTimestamp, togglePlay} from "../../redux/app-reducer";
 
 const VideoPlayerContainer: FC<PropsType> = (props) => {
     return(
@@ -11,8 +11,9 @@ const VideoPlayerContainer: FC<PropsType> = (props) => {
 
 const mapStateToProps = (state:any): MapStateToPropsType => {
     return {
-        isPlayed: state.videoPlayer.isPlayed,
-        timestamp: state.videoPlayer.timestamp
+        isPlayed: state.app.isPlayed,
+        timestamp: state.app.timestamp,
+        activeEvents: state.app.activeEvents
     };
 };
 
@@ -20,11 +21,13 @@ type PropsType = MapStateToPropsType & MapDispatchToPropsType;
 
 type MapStateToPropsType = {
     isPlayed: boolean,
-    timestamp: number | string
+    timestamp: number | string,
+    activeEvents: Array<any>
 }
 
 type MapDispatchToPropsType = {
-    togglePlay: ()=>void
+    togglePlay: ()=>void,
+    setActiveEvents: ()=>void
 }
 
-export default connect(mapStateToProps,{togglePlay, setTimestamp})(VideoPlayerContainer);
+export default connect(mapStateToProps,{togglePlay, setTimestamp,setActiveEvents})(VideoPlayerContainer);

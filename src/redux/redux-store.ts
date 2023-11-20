@@ -1,9 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import eventsListReducer from "./events-list-reducer";
-import videoPlayerReducer from "./video-player-reducer";
+import appReducer from "./app-reducer";
 
-const rootReducer = {eventsList: eventsListReducer, videoPlayer: videoPlayerReducer}
+const rootReducer = {app: appReducer}
 
 const store = configureStore({
     reducer: rootReducer
