@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 import EventsListItem from "./events-list-item/events-list-item";
 import {getEventsList} from "../../redux/app-selectors";
 import Loader from "../loader/loader";
-import {setTimestamp} from "../../redux/app-reducer";
+import {updateTimestamp} from "../../redux/app-reducer";
 
 const EventsListContainer: FC<PropsType> = ({eventsList, isFetching, requestEventsList, setTimestamp}) => {
 
@@ -27,6 +27,11 @@ const mapStateToProps = (state:any): MapStateToPropsType => {
     };
 };
 
+const mapDispatchProps = {
+        requestEventsList,
+        setTimestamp: (timestamp: number, isForced: boolean) => updateTimestamp(timestamp,true)
+}
+
 type PropsType = MapStateToPropsType & MapDispatchToPropsType;
 
 type MapStateToPropsType = {
@@ -36,7 +41,7 @@ type MapStateToPropsType = {
 
 type MapDispatchToPropsType = {
     requestEventsList: () => void,
-    setTimestamp: (timestamp: number) => void
+    setTimestamp: (timestamp: number, isForced: boolean) => void
 }
 
-export default connect(mapStateToProps,{requestEventsList,setTimestamp})(EventsListContainer);
+export default connect(mapStateToProps,mapDispatchProps)(EventsListContainer);

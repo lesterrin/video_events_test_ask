@@ -5,13 +5,15 @@ const TOGGLE_IS_FETCHING = "app/TOGGLE-IS-FETCHING";
 const TOGGLE_PLAY = "app/TOGGLE-PLAY";
 const SET_TIMESTAMP = "app/SET-TIMESTAMP";
 const SET_ACTIVE_EVENTS = "app/SET-ACTIVE-EVENTS";
+const SET_IS_FORCED_TIMESTAMP = "app/SET-IS-FORCED-TIMESTAMP";
 
 const initialState = {
     eventsListData: [] as Array<any>,
     isFetching: false as boolean,
     link: '' as string,
     isPlayed: false as boolean,
-    timestamp: '0' as string,
+    timestamp: 0 as number,
+    isForcedTimestamp: false as boolean,
     activeEvents: [] as Array<any>
 };
 
@@ -35,6 +37,12 @@ const appReducer = (state = initialState, action: any): initialStateType => {
                 isPlayed: !state.isPlayed
             }
 
+        case SET_IS_FORCED_TIMESTAMP:
+            return {
+                ...state,
+                isForcedTimestamp: action.isForced
+            }
+
         case SET_TIMESTAMP:
             return {
                 ...state,
@@ -44,7 +52,7 @@ const appReducer = (state = initialState, action: any): initialStateType => {
         case SET_ACTIVE_EVENTS:
             return {
                 ...state,
-                activeEvents: [...state.eventsListData].filter(e=>{
+                activeEvents: [...state.eventsListData].filter(e => {
                     const eventEnd = e.timestamp + e.duration;
                     if (state.timestamp >= e.timestamp && state.timestamp <= eventEnd) return e;
                 })
@@ -57,26 +65,25 @@ const appReducer = (state = initialState, action: any): initialStateType => {
 
 export const setEventsList = (eventsListData: any) => ({type: SET_EVENTS_LIST, eventsListData});
 export const toggleIsFetching = (isFetching: boolean) => ({type: TOGGLE_IS_FETCHING, isFetching});
+export const togglePlay = () => ({type: TOGGLE_PLAY});
+export const setIsForcedTimestamp = (isForced: boolean) => ({type: SET_IS_FORCED_TIMESTAMP, isForced});
+export const setActiveEvents = () => ({type: SET_ACTIVE_EVENTS});
+export const setTimestamp = (timestamp: number) => ({type: SET_TIMESTAMP, timestamp});
 
-export const requestEventsList = (): any =>
-    async (dispatch: any) => {
+export const updateTimestamp = (timestamp: number, isForced = false) => (dispatch: (arg0: { type: string; timestamp?: number; }) => void) => {
+    dispatch(setTimestamp(timestamp));
+    dispatch(setActiveEvents());
+    dispatch(setIsForcedTimestamp(isForced));
+};
+
+export const requestEventsList = (): any => async (dispatch: any) => {
         dispatch(toggleIsFetching(true));
 
         let data = await getEventsList();
 
         dispatch(toggleIsFetching(false));
         dispatch(setEventsList(data));
-    }
-
-export const togglePlay = () => ({type: TOGGLE_PLAY});
-export const setTimestampTRUE = (timestamp: number) => ({type: SET_TIMESTAMP, timestamp});
-
-export const setTimestamp = (timestamp: number) => (dispatch: (arg0: { type: string; timestamp?: number; }) => void) =>{
-    dispatch(setTimestampTRUE(timestamp));
-    dispatch(setActiveEvents());
-};
-
-export const setActiveEvents = () => ({type: SET_ACTIVE_EVENTS});
+}
 
 type initialStateType = typeof initialState;
 

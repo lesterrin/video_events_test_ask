@@ -1,14 +1,14 @@
 import React, {createElement, FC, useEffect} from "react";
 import s from "./video-player.module.css";
+import {setIsForcedTimestamp} from "../../redux/app-reducer";
 
-const VideoPlayer: FC<any> = ({isPlayed, timestamp, togglePlay, setTimestamp, setActiveEvents, activeEvents}) => {
+const VideoPlayer: FC<any> = ({isPlayed, timestamp, isForcedTimestamp, togglePlay, setTimestamp, setActiveEvents, activeEvents}) => {
     const videoRef = React.createRef<HTMLVideoElement>(); //изучить
     const videoWrapperRef = React.createRef<HTMLDivElement>(); //изучить
 
-    let activeEventsTags = [] as Array<any>;
-
-    activeEventsTags = activeEvents.map((e: any) => createElement('div', {
+    const activeEventsTags = activeEvents.map((e: any, i: any) => createElement('div', {
         className: s.exRect,
+        key: `aet${i}`,
         style: {
             width: `${e.zone.width}px`,
             height: `${e.zone.height}px`,
@@ -20,7 +20,7 @@ const VideoPlayer: FC<any> = ({isPlayed, timestamp, togglePlay, setTimestamp, se
     const handleTimeUpdate = (e: any) => {
         if (videoRef.current) {
             setTimestamp(e.target.currentTime);
-            setActiveEvents();
+            //setActiveEvents();
         }
     }
 
@@ -36,11 +36,11 @@ const VideoPlayer: FC<any> = ({isPlayed, timestamp, togglePlay, setTimestamp, se
             videoElement.pause();
         }
 
-        if (videoElement) {
+        if (videoElement && isForcedTimestamp) {
             //почему-то currentTime обрубается после 6 знака после запятой,
             //из-за чего метка устанавливается чуть раньше события,
             //поэтому добавляется 0.000001
-            //videoElement.currentTime = timestamp + 0.000001;
+            videoElement.currentTime = timestamp + 0.000001;
         }
     });
 
