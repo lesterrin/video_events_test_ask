@@ -1,42 +1,35 @@
-import React, {FC, useEffect} from "react";
+import React, {FC} from "react";
 import EventsList from "./events-list";
-import {requestEventsList} from "../../redux/app-reducer";
+import {initializeApp} from "../../redux/app-reducer";
 import {connect} from "react-redux";
 import EventsListItem from "./events-list-item/events-list-item";
 import {getEventsList} from "../../redux/app-selectors";
-import Loader from "../loader/loader";
 import {updateTimestamp} from "../../redux/app-reducer";
 
-const EventsListContainer: FC<PropsType> = ({eventsList, isFetching, requestEventsList, setTimestamp}) => {
+const EventsListContainer: FC<PropsType> = ({eventsList, setTimestamp}) => {
 
-    useEffect(() => {
-        requestEventsList();
-    }, []);
-
-    eventsList = eventsList.map((item, i) => <EventsListItem key={i} {...item} setTimestamp={setTimestamp}/>);
+    eventsList = eventsList.map((item, i) => <EventsListItem key={`eli${i}`} {...item} setTimestamp={setTimestamp}/>);
 
     return (
-        isFetching ? <Loader/> : <EventsList eventsList={eventsList}/>
+        <EventsList eventsList={eventsList}/>
     );
 }
 
-const mapStateToProps = (state:any): MapStateToPropsType => {
+const mapStateToProps = (state: any): MapStateToPropsType => {
     return {
-        eventsList: getEventsList(state),
-        isFetching: state.app.isFetching
+        eventsList: getEventsList(state)
     };
 };
 
 const mapDispatchProps = {
-        requestEventsList,
-        setTimestamp: (timestamp: number, isForced: boolean) => updateTimestamp(timestamp,true)
+    requestEventsList: initializeApp,
+    setTimestamp: (timestamp: number, isForced: boolean) => updateTimestamp(timestamp, true)
 }
 
 type PropsType = MapStateToPropsType & MapDispatchToPropsType;
 
 type MapStateToPropsType = {
-    eventsList: Array<any>,
-    isFetching: boolean
+    eventsList: Array<any>
 }
 
 type MapDispatchToPropsType = {
@@ -44,4 +37,4 @@ type MapDispatchToPropsType = {
     setTimestamp: (timestamp: number, isForced: boolean) => void
 }
 
-export default connect(mapStateToProps,mapDispatchProps)(EventsListContainer);
+export default connect(mapStateToProps, mapDispatchProps)(EventsListContainer);

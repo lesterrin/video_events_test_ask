@@ -1,15 +1,31 @@
-import React from 'react';
+import React, {FC, useEffect} from 'react';
 import './app.css';
 import EventsListContainer from "../events-list/events-list-container";
 import VideoPlayerContainer from "../video-player/video-player-container";
+import {connect} from "react-redux";
+import {initializeApp} from "../../redux/app-reducer";
+import Loader from "../loader/loader";
 
-function App() {
-  return (
-      <>
-        <VideoPlayerContainer/>
-        <EventsListContainer/>
-      </>
-  );
+const App: FC<any> = ({isInitialized, initializeApp}) => {
+    useEffect(() => {
+        initializeApp();
+    }, []);
+
+    if (isInitialized) {
+        return <Loader/>
+    } else {
+        return (
+            <>
+                <VideoPlayerContainer/>
+                <EventsListContainer/>
+            </>
+        );
+    }
 }
+const mapStateToProps = (state: any) => ({
+    isInitialized: state.app.isInitialized
+})
 
-export default App;
+const AppContainer = connect(mapStateToProps, {initializeApp})(App);
+
+export default AppContainer;

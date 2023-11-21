@@ -1,11 +1,24 @@
-import React, {FC} from "react";
+import React, {createElement, FC} from "react";
 import VideoPlayer from "./video-player";
 import {connect} from "react-redux";
 import {setActiveEvents, updateTimestamp, togglePlay} from "../../redux/app-reducer";
+import s from "./video-player.module.css";
 
 const VideoPlayerContainer: FC<PropsType> = (props) => {
+    console.log(props);
+    const activeEventsElements = props.activeEvents.map((e: any, i: any) => createElement('div', {
+        className: s.exRect,
+        key: `aet${i}`,
+        style: {
+            width: `${e.zone.width}px`,
+            height: `${e.zone.height}px`,
+            top: `${e.zone.top}px`,
+            left: `${e.zone.left}px`
+        }
+    }));
+
     return (
-        <VideoPlayer {...props}/>
+        <VideoPlayer {...props} activeEventsElements={activeEventsElements}/>
     );
 }
 

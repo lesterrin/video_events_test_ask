@@ -1,7 +1,7 @@
 import {getEventsList} from '../api/api';
 
 const SET_EVENTS_LIST = "app/SET-EVENTS-LIST";
-const TOGGLE_IS_FETCHING = "app/TOGGLE-IS-FETCHING";
+const TOGGLE_IS_INITIALIZED = "app/TOGGLE-IS-INITIALIZED";
 const TOGGLE_PLAY = "app/TOGGLE-PLAY";
 const SET_TIMESTAMP = "app/SET-TIMESTAMP";
 const SET_ACTIVE_EVENTS = "app/SET-ACTIVE-EVENTS";
@@ -9,7 +9,7 @@ const SET_IS_FORCED_TIMESTAMP = "app/SET-IS-FORCED-TIMESTAMP";
 
 const initialState = {
     eventsListData: [] as Array<any>,
-    isFetching: false as boolean,
+    isInitialized: false as boolean,
     link: '' as string,
     isPlayed: false as boolean,
     timestamp: 0 as number,
@@ -25,10 +25,10 @@ const appReducer = (state = initialState, action: any): initialStateType => {
                 eventsListData: [...action.eventsListData]
             }
 
-        case TOGGLE_IS_FETCHING:
+        case TOGGLE_IS_INITIALIZED:
             return {
                 ...state,
-                isFetching: action.isFetching
+                isInitialized: action.isInitialized
             }
 
         case TOGGLE_PLAY:
@@ -64,7 +64,7 @@ const appReducer = (state = initialState, action: any): initialStateType => {
 }
 
 export const setEventsList = (eventsListData: any) => ({type: SET_EVENTS_LIST, eventsListData});
-export const toggleIsFetching = (isFetching: boolean) => ({type: TOGGLE_IS_FETCHING, isFetching});
+export const toggleIsFetching = (isInitialized: boolean) => ({type: TOGGLE_IS_INITIALIZED, isInitialized: isInitialized});
 export const togglePlay = () => ({type: TOGGLE_PLAY});
 export const setIsForcedTimestamp = (isForced: boolean) => ({type: SET_IS_FORCED_TIMESTAMP, isForced});
 export const setActiveEvents = () => ({type: SET_ACTIVE_EVENTS});
@@ -76,7 +76,7 @@ export const updateTimestamp = (timestamp: number, isForced = false) => (dispatc
     dispatch(setIsForcedTimestamp(isForced));
 };
 
-export const requestEventsList = (): any => async (dispatch: any) => {
+export const initializeApp = (): any => async (dispatch: any) => {
         dispatch(toggleIsFetching(true));
 
         let data = await getEventsList();
