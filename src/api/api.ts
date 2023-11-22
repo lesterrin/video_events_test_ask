@@ -9,4 +9,4 @@ export const getEventsList = () => {
         .catch((e) => alertError(e));
 }
 
-const alertError = (e:any) => console.log(e);
+const alertError = (e:any) => alert(e);

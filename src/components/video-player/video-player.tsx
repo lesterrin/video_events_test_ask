@@ -1,6 +1,5 @@
-import React, {createElement, FC, useEffect} from "react";
+import React, {FC, useEffect} from "react";
 import s from "./video-player.module.css";
-import {setIsForcedTimestamp} from "../../redux/app-reducer";
 
 const VideoPlayer: FC<any> = ({isPlayed, timestamp, isForcedTimestamp, activeEventsElements,
                                   togglePlay, setTimestamp}) => {
@@ -34,7 +33,7 @@ const VideoPlayer: FC<any> = ({isPlayed, timestamp, isForcedTimestamp, activeEve
 
     return (
         <div className={s.videoPlayerComponentWrapper}>
-            <div>{String(isPlayed)} - {timestamp}</div>
+            <div>Время - {timestamp}</div>
             <br/>
             <div onClick={togglePlay} className={s.videoPlayerWrapper}>
                 {activeEventsElements}
@@ -43,8 +42,6 @@ const VideoPlayer: FC<any> = ({isPlayed, timestamp, isForcedTimestamp, activeEve
                        src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">
                 </video>
             </div>
-            {/*<div className={s.activeEventsList}>{activeEvents.map((e: any, i: number) => <div
-                key={i}>{e.timestamp} | {e.duration}</div>)}</div>*/}
         </div>
     )
 }

@@ -1,11 +1,10 @@
 import React, {createElement, FC} from "react";
 import VideoPlayer from "./video-player";
 import {connect} from "react-redux";
-import {setActiveEvents, updateTimestamp, togglePlay} from "../../redux/app-reducer";
+import {actions, updateTimestamp} from "../../redux/app-reducer";
 import s from "./video-player.module.css";
 
 const VideoPlayerContainer: FC<PropsType> = (props) => {
-    console.log(props);
     const activeEventsElements = props.activeEvents.map((e: any, i: any) => createElement('div', {
         className: s.exRect,
         key: `aet${i}`,
@@ -45,4 +44,8 @@ type MapDispatchToPropsType = {
     setActiveEvents: () => void
 }
 
-export default connect(mapStateToProps, {togglePlay, setTimestamp: updateTimestamp, setActiveEvents})(VideoPlayerContainer);
+export default connect(mapStateToProps, {
+    togglePlay: actions.togglePlay,
+    setTimestamp: updateTimestamp,
+    setActiveEvents: actions.setActiveEvents
+})(VideoPlayerContainer);

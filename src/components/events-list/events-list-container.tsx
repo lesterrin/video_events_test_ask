@@ -26,6 +26,7 @@ const mapDispatchProps = {
     setTimestamp: (timestamp: number, isForced: boolean) => updateTimestamp(timestamp, true)
 }
 
+
 type PropsType = MapStateToPropsType & MapDispatchToPropsType;
 
 type MapStateToPropsType = {

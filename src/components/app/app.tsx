@@ -5,13 +5,14 @@ import VideoPlayerContainer from "../video-player/video-player-container";
 import {connect} from "react-redux";
 import {initializeApp} from "../../redux/app-reducer";
 import Loader from "../loader/loader";
+import {AppStateType} from "../../redux/redux-store";
 
-const App: FC<any> = ({isInitialized, initializeApp}) => {
+const App: React.FC<MapStateToPropsType & MapDispatchToPropsType> = ({isInitialized, initializeApp}) => {
     useEffect(() => {
         initializeApp();
     }, []);
 
-    if (isInitialized) {
+    if (!isInitialized) {
         return <Loader/>
     } else {
         return (
@@ -22,10 +23,18 @@ const App: FC<any> = ({isInitialized, initializeApp}) => {
         );
     }
 }
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: AppStateType): MapStateToPropsType => ({
     isInitialized: state.app.isInitialized
-})
+});
 
 const AppContainer = connect(mapStateToProps, {initializeApp})(App);
+
+type MapStateToPropsType = {
+    isInitialized: boolean
+};
+
+type MapDispatchToPropsType = {
+    initializeApp: ()=> void
+};
 
 export default AppContainer;

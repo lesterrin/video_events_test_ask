@@ -9,10 +9,6 @@
     transform: translate(-50%, 0);
 }
 
-.videoPlayerWrapper video{
-    /*width: 600px;*/
-}
-
 .exRect {
     position: absolute;
     transform: translate(-50%, -50%);

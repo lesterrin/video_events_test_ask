@@ -1,4 +1,8 @@
 import {getEventsList} from '../api/api';
+import {EventType, InferActionsTypes} from "../types";
+import {Dispatch} from "redux";
+import {ThunkAction} from "redux-thunk";
+import {AppStateType} from "./redux-store";
 
 const SET_EVENTS_LIST = "app/SET-EVENTS-LIST";
 const TOGGLE_IS_INITIALIZED = "app/TOGGLE-IS-INITIALIZED";
@@ -8,27 +12,28 @@ const SET_ACTIVE_EVENTS = "app/SET-ACTIVE-EVENTS";
 const SET_IS_FORCED_TIMESTAMP = "app/SET-IS-FORCED-TIMESTAMP";
 
 const initialState = {
-    eventsListData: [] as Array<any>,
     isInitialized: false as boolean,
+    eventsListData: [] as Array<EventType>,
     link: '' as string,
     isPlayed: false as boolean,
     timestamp: 0 as number,
     isForcedTimestamp: false as boolean,
-    activeEvents: [] as Array<any>
+    activeEvents: [] as Array<EventType>
 };
 
-const appReducer = (state = initialState, action: any): initialStateType => {
+const appReducer = (state = initialState, action: ActionsTypes): initialStateType => {
     switch (action.type) {
-        case SET_EVENTS_LIST:
-            return {
-                ...state,
-                eventsListData: [...action.eventsListData]
-            }
 
         case TOGGLE_IS_INITIALIZED:
             return {
                 ...state,
                 isInitialized: action.isInitialized
+            }
+
+        case SET_EVENTS_LIST:
+            return {
+                ...state,
+                eventsListData: [...action.eventsListData]
             }
 
         case TOGGLE_PLAY:
@@ -37,16 +42,16 @@ const appReducer = (state = initialState, action: any): initialStateType => {
                 isPlayed: !state.isPlayed
             }
 
-        case SET_IS_FORCED_TIMESTAMP:
-            return {
-                ...state,
-                isForcedTimestamp: action.isForced
-            }
-
         case SET_TIMESTAMP:
             return {
                 ...state,
                 timestamp: action.timestamp
+            }
+
+        case SET_IS_FORCED_TIMESTAMP:
+            return {
+                ...state,
+                isForcedTimestamp: action.isForced
             }
 
         case SET_ACTIVE_EVENTS:
@@ -63,28 +68,55 @@ const appReducer = (state = initialState, action: any): initialStateType => {
     }
 }
 
-export const setEventsList = (eventsListData: any) => ({type: SET_EVENTS_LIST, eventsListData});
-export const toggleIsFetching = (isInitialized: boolean) => ({type: TOGGLE_IS_INITIALIZED, isInitialized: isInitialized});
-export const togglePlay = () => ({type: TOGGLE_PLAY});
-export const setIsForcedTimestamp = (isForced: boolean) => ({type: SET_IS_FORCED_TIMESTAMP, isForced});
-export const setActiveEvents = () => ({type: SET_ACTIVE_EVENTS});
-export const setTimestamp = (timestamp: number) => ({type: SET_TIMESTAMP, timestamp});
-
-export const updateTimestamp = (timestamp: number, isForced = false) => (dispatch: (arg0: { type: string; timestamp?: number; }) => void) => {
-    dispatch(setTimestamp(timestamp));
-    dispatch(setActiveEvents());
-    dispatch(setIsForcedTimestamp(isForced));
-};
-
-export const initializeApp = (): any => async (dispatch: any) => {
-        dispatch(toggleIsFetching(true));
-
-        let data = await getEventsList();
-
-        dispatch(toggleIsFetching(false));
-        dispatch(setEventsList(data));
+export const actions = {
+    toggleIsInitialized: (isInitialized: boolean) => ({type: TOGGLE_IS_INITIALIZED, isInitialized: isInitialized} as const),
+    setEventsList: (eventsListData: Array<EventType>) => ({type: SET_EVENTS_LIST, eventsListData} as const),
+    togglePlay: () => ({type: TOGGLE_PLAY} as const),
+    setTimestamp: (timestamp: number) => ({type: SET_TIMESTAMP, timestamp} as const),
+    setIsForcedTimestamp: (isForced: boolean) => ({type: SET_IS_FORCED_TIMESTAMP, isForced} as const),
+    setActiveEvents: () => ({type: SET_ACTIVE_EVENTS} as const)
 }
 
-type initialStateType = typeof initialState;
+/*type ToggleIsInitializedType = { type: typeof TOGGLE_IS_INITIALIZED, isInitialized: boolean };
+type SetEventsListType = { type: typeof SET_EVENTS_LIST, eventsListData: Array<EventType> };
+type TogglePlayType = { type: typeof TOGGLE_PLAY };
+type SetTimestampType = { type: typeof SET_TIMESTAMP, timestamp: number };
+type SetIsForcedTimestampType = { type: typeof SET_IS_FORCED_TIMESTAMP, isForced: boolean };
+type SetActiveEventsType = { type: typeof SET_ACTIVE_EVENTS };
+
+/!*type ActionsTypes =
+    ToggleIsInitializedType
+    | SetEventsListType
+    | TogglePlayType
+    | SetTimestampType
+    | SetIsForcedTimestampType
+    | SetActiveEventsType;*!/*/
+
+type ActionsTypes = InferActionsTypes<typeof actions>;
+
+/*export const toggleIsInitialized = (isInitialized: boolean) => ({type: TOGGLE_IS_INITIALIZED, isInitialized: isInitialized});
+export const setEventsList = (eventsListData: Array<EventType>) => ({type: SET_EVENTS_LIST, eventsListData});
+export const togglePlay = () => ({type: TOGGLE_PLAY});
+export const setTimestamp = (timestamp: number) => ({type: SET_TIMESTAMP, timestamp});
+export const setIsForcedTimestamp = (isForced: boolean) => ({type: SET_IS_FORCED_TIMESTAMP, isForced});
+export const setActiveEvents = () => ({type: SET_ACTIVE_EVENTS});*/
+
+export const initializeApp = (): ThunkType => async (dispatch) => {
+    let data = await getEventsList();
+
+    dispatch(actions.toggleIsInitialized(true));
+    dispatch(actions.setEventsList(data));
+}
+
+export const updateTimestamp = (timestamp: number, isForced = false): ThunkType => (dispatch) => {
+    dispatch(actions.setTimestamp(timestamp));
+    dispatch(actions.setActiveEvents());
+    dispatch(actions.setIsForcedTimestamp(isForced));
+};
+
+export type DispatchType = Dispatch<ActionsTypes>;
+type ThunkType = ThunkAction<void, AppStateType, unknown, ActionsTypes>;
+
+export type initialStateType = typeof initialState;
 
 export default appReducer;
