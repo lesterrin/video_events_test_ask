@@ -1,41 +1,48 @@
 import React, {FC} from "react";
 import EventsList from "./events-list";
-import {initializeApp} from "../../redux/app-reducer";
 import {connect} from "react-redux";
 import EventsListItem from "./events-list-item/events-list-item";
 import {getEventsList} from "../../redux/app-selectors";
 import {updateTimestamp} from "../../redux/app-reducer";
+import {AppStateType} from "../../redux/redux-store";
+import {EventZoneType} from "../../types";
 
 const EventsListContainer: FC<PropsType> = ({eventsList, setTimestamp}) => {
 
-    eventsList = eventsList.map((item, i) => <EventsListItem key={`eli${i}`} {...item} setTimestamp={setTimestamp}/>);
+    const eventsListElements = eventsList.map((item, i) => <EventsListItem key={`eli${i}`} {...item}
+                                                                           setTimestamp={setTimestamp}/>);
 
     return (
-        <EventsList eventsList={eventsList}/>
+        <EventsList eventsList={eventsListElements}/>
     );
 }
 
-const mapStateToProps = (state: any): MapStateToPropsType => {
+const mapStateToProps = (state: AppStateType)=> {
     return {
         eventsList: getEventsList(state)
     };
 };
 
-const mapDispatchProps = {
-    requestEventsList: initializeApp,
-    setTimestamp: (timestamp: number, isForced: boolean) => updateTimestamp(timestamp, true)
+const mapDispatchToProps = {
+    setTimestamp: (timestamp: number) => updateTimestamp(timestamp, true)
 }
 
 
 type PropsType = MapStateToPropsType & MapDispatchToPropsType;
 
+type FormatedEventType = {
+    duration: string,
+    sourceTimestamp: number,
+    timestamp: string,
+    zone: EventZoneType
+}
+
 type MapStateToPropsType = {
-    eventsList: Array<any>
+    eventsList: Array<FormatedEventType>
 }
 
 type MapDispatchToPropsType = {
-    requestEventsList: () => void,
-    setTimestamp: (timestamp: number, isForced: boolean) => void
+    setTimestamp: (timestamp: number) => void
 }
 
-export default connect(mapStateToProps, mapDispatchProps)(EventsListContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(EventsListContainer);

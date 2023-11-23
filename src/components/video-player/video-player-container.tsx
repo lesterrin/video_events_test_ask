@@ -3,9 +3,12 @@ import VideoPlayer from "./video-player";
 import {connect} from "react-redux";
 import {actions, updateTimestamp} from "../../redux/app-reducer";
 import s from "./video-player.module.css";
+import {AppStateType} from "../../redux/redux-store";
+import {EventType} from "../../types";
 
 const VideoPlayerContainer: FC<PropsType> = (props) => {
-    const activeEventsElements = props.activeEvents.map((e: any, i: any) => createElement('div', {
+
+    const activeEventsElements = props.activeEvents.map((e, i) => createElement('div', {
         className: s.exRect,
         key: `aet${i}`,
         style: {
@@ -21,7 +24,7 @@ const VideoPlayerContainer: FC<PropsType> = (props) => {
     );
 }
 
-const mapStateToProps = (state: any): MapStateToPropsType => {
+const mapStateToProps = (state: AppStateType): MapStateToPropsType => {
     return {
         isPlayed: state.app.isPlayed,
         isForcedTimestamp: state.app.isForcedTimestamp,
@@ -35,12 +38,13 @@ type PropsType = MapStateToPropsType & MapDispatchToPropsType;
 type MapStateToPropsType = {
     isPlayed: boolean,
     isForcedTimestamp: boolean,
-    timestamp: number | string,
-    activeEvents: Array<any>
+    timestamp: number,
+    activeEvents: Array<EventType>
 }
 
 type MapDispatchToPropsType = {
     togglePlay: () => void,
+    setTimestamp: (timestamp: number) => void,
     setActiveEvents: () => void
 }
 

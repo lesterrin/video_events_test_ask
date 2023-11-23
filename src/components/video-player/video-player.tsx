@@ -1,7 +1,8 @@
-import React, {FC, useEffect} from "react";
+import React, {FC, ReactElement, useEffect} from "react";
 import s from "./video-player.module.css";
+import {EventType} from "../../types";
 
-const VideoPlayer: FC<any> = ({isPlayed, timestamp, isForcedTimestamp, activeEventsElements,
+const VideoPlayer: FC<PropsType> = ({isPlayed, timestamp, isForcedTimestamp, activeEventsElements,
                                   togglePlay, setTimestamp}) => {
 
     const videoRef = React.createRef<HTMLVideoElement>(); //изучить
@@ -18,17 +19,15 @@ const VideoPlayer: FC<any> = ({isPlayed, timestamp, isForcedTimestamp, activeEve
         }
 
         if (videoElement && isForcedTimestamp) {
-            //почему-то currentTime обрубается после 6 знака после запятой,
+            //currentTime обрубается после 6 знака после запятой,
             //из-за чего метка устанавливается чуть раньше события,
-            //поэтому добавляется 0.000001
+            //поэтому добавляем 0.000001
             videoElement.currentTime = timestamp + 0.000001;
         }
     });
 
-    const handleTimeUpdate = (e: any) => {
-        if (videoRef.current) {
-            setTimestamp(e.target.currentTime);
-        }
+    const handleTimeUpdate = () => {
+        if(videoRef.current) setTimestamp(videoRef.current.currentTime);
     }
 
     return (
@@ -44,6 +43,17 @@ const VideoPlayer: FC<any> = ({isPlayed, timestamp, isForcedTimestamp, activeEve
             </div>
         </div>
     )
+}
+
+type PropsType = {
+    isPlayed: boolean,
+    isForcedTimestamp: boolean,
+    timestamp: number,
+    activeEvents: Array<EventType>,
+    togglePlay: () => void,
+    setActiveEvents: () => void,
+    setTimestamp: (timestamp: number) => void
+    activeEventsElements: Array<ReactElement>
 }
 
 export default VideoPlayer;

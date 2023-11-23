@@ -7,7 +7,7 @@ import {initializeApp} from "../../redux/app-reducer";
 import Loader from "../loader/loader";
 import {AppStateType} from "../../redux/redux-store";
 
-const App: React.FC<MapStateToPropsType & MapDispatchToPropsType> = ({isInitialized, initializeApp}) => {
+const App: FC<PropsType> = ({isInitialized, initializeApp}) => {
     useEffect(() => {
         initializeApp();
     }, []);
@@ -28,6 +28,8 @@ const mapStateToProps = (state: AppStateType): MapStateToPropsType => ({
 });
 
 const AppContainer = connect(mapStateToProps, {initializeApp})(App);
+
+type PropsType = MapStateToPropsType & MapDispatchToPropsType;
 
 type MapStateToPropsType = {
     isInitialized: boolean

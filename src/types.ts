@@ -1,10 +1,12 @@
+export type EventsListType = Array<EventType>;
+
 export type EventType = {
     duration: number,
     timestamp: number,
     zone: EventZoneType
 }
 
-type EventZoneType = {
+export type EventZoneType = {
     height: number,
     left: number,
     top: number,
