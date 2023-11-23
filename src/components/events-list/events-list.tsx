@@ -6,9 +6,8 @@ const EventsList: FC<PropsType> = (props) => {
         <div className={s.eventsListTable}>{props.eventsList}</div>
     )
 }
+export default EventsList;
 
 type PropsType = {
     eventsList: Array<any>
 };
-
-export default EventsList;

@@ -1,11 +1,12 @@
 import React, {FC, ReactElement, useEffect} from "react";
 import s from "./video-player.module.css";
 import {EventType} from "../../types";
+import {formatTime} from "../../helpers/helpers";
 
-const VideoPlayer: FC<PropsType> = ({isPlayed, timestamp, isForcedTimestamp, activeEventsElements,
-                                  togglePlay, setTimestamp}) => {
+const VideoPlayer: FC<PropsType> = ({isPlayed, timestamp, isForcedTimestamp,
+                                        activeEventsElements, togglePlay, setTimestamp}) => {
 
-    const videoRef = React.createRef<HTMLVideoElement>(); //изучить
+    const videoRef = React.createRef<HTMLVideoElement>();
 
     useEffect(() => {
         const videoElement = videoRef.current;
@@ -19,9 +20,6 @@ const VideoPlayer: FC<PropsType> = ({isPlayed, timestamp, isForcedTimestamp, act
         }
 
         if (videoElement && isForcedTimestamp) {
-            //currentTime обрубается после 6 знака после запятой,
-            //из-за чего метка устанавливается чуть раньше события,
-            //поэтому добавляем 0.000001
             videoElement.currentTime = timestamp + 0.000001;
         }
     });
@@ -32,10 +30,13 @@ const VideoPlayer: FC<PropsType> = ({isPlayed, timestamp, isForcedTimestamp, act
 
     return (
         <div className={s.videoPlayerComponentWrapper}>
-            <div>Время - {timestamp}</div>
             <br/>
             <div onClick={togglePlay} className={s.videoPlayerWrapper}>
                 {activeEventsElements}
+                <div className={s.iconWrapper}>
+                    {isPlayed ? <div className={s.iconPause}></div> : <div className={s.iconPlay}></div>}
+                </div>
+                <div className={s.infoPanel}>{formatTime(timestamp)}</div>
                 <video ref={videoRef}
                        onTimeUpdate={handleTimeUpdate}
                        src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">
@@ -44,6 +45,8 @@ const VideoPlayer: FC<PropsType> = ({isPlayed, timestamp, isForcedTimestamp, act
         </div>
     )
 }
+
+export default VideoPlayer;
 
 type PropsType = {
     isPlayed: boolean,
@@ -55,5 +58,3 @@ type PropsType = {
     setTimestamp: (timestamp: number) => void
     activeEventsElements: Array<ReactElement>
 }
-
-export default VideoPlayer;

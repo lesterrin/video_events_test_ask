@@ -9,23 +9,24 @@ import {EventZoneType} from "../../types";
 
 const EventsListContainer: FC<PropsType> = ({eventsList, setTimestamp}) => {
 
-    const eventsListElements = eventsList.map((item, i) => <EventsListItem key={`eli${i}`} {...item}
-                                                                           setTimestamp={setTimestamp}/>);
+    const eventsListElements = eventsList.map((item, i) => (
+        <EventsListItem key={`eli${i}`} {...item} setTimestamp={setTimestamp}/>
+    ));
 
     return (
         <EventsList eventsList={eventsListElements}/>
     );
-}
-
-const mapStateToProps = (state: AppStateType)=> {
-    return {
-        eventsList: getEventsList(state)
-    };
 };
+
+const mapStateToProps = (state: AppStateType) => ({
+    eventsList: getEventsList(state)
+});
 
 const mapDispatchToProps = {
     setTimestamp: (timestamp: number) => updateTimestamp(timestamp, true)
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(EventsListContainer);
 
 
 type PropsType = MapStateToPropsType & MapDispatchToPropsType;
@@ -44,5 +45,3 @@ type MapStateToPropsType = {
 type MapDispatchToPropsType = {
     setTimestamp: (timestamp: number) => void
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(EventsListContainer);

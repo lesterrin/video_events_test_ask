@@ -9,7 +9,7 @@ import {EventType} from "../../types";
 const VideoPlayerContainer: FC<PropsType> = (props) => {
 
     const activeEventsElements = props.activeEvents.map((e, i) => createElement('div', {
-        className: s.exRect,
+        className: s.rect,
         key: `aet${i}`,
         style: {
             width: `${e.zone.width}px`,
@@ -33,6 +33,12 @@ const mapStateToProps = (state: AppStateType): MapStateToPropsType => {
     };
 };
 
+export default connect(mapStateToProps, {
+    togglePlay: actions.togglePlay,
+    setTimestamp: updateTimestamp,
+    setActiveEvents: actions.setActiveEvents
+})(VideoPlayerContainer);
+
 type PropsType = MapStateToPropsType & MapDispatchToPropsType;
 
 type MapStateToPropsType = {
@@ -47,9 +53,3 @@ type MapDispatchToPropsType = {
     setTimestamp: (timestamp: number) => void,
     setActiveEvents: () => void
 }
-
-export default connect(mapStateToProps, {
-    togglePlay: actions.togglePlay,
-    setTimestamp: updateTimestamp,
-    setActiveEvents: actions.setActiveEvents
-})(VideoPlayerContainer);

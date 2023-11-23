@@ -29,6 +29,8 @@ const mapStateToProps = (state: AppStateType): MapStateToPropsType => ({
 
 const AppContainer = connect(mapStateToProps, {initializeApp})(App);
 
+export default AppContainer;
+
 type PropsType = MapStateToPropsType & MapDispatchToPropsType;
 
 type MapStateToPropsType = {
@@ -38,5 +40,3 @@ type MapStateToPropsType = {
 type MapDispatchToPropsType = {
     initializeApp: ()=> void
 };
-
-export default AppContainer;
