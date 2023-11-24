@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import appReducer from "./app-reducer";
+import appReducer, {DispatchType} from "./app-reducer";
+import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 
 const rootReducer = {app: appReducer};
 

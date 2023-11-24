@@ -77,29 +77,7 @@ export const actions = {
     setActiveEvents: () => ({type: SET_ACTIVE_EVENTS} as const)
 }
 
-/*type ToggleIsInitializedType = { type: typeof TOGGLE_IS_INITIALIZED, isInitialized: boolean };
-type SetEventsListType = { type: typeof SET_EVENTS_LIST, eventsListData: Array<EventType> };
-type TogglePlayType = { type: typeof TOGGLE_PLAY };
-type SetTimestampType = { type: typeof SET_TIMESTAMP, timestamp: number };
-type SetIsForcedTimestampType = { type: typeof SET_IS_FORCED_TIMESTAMP, isForced: boolean };
-type SetActiveEventsType = { type: typeof SET_ACTIVE_EVENTS };
-
-/!*type ActionsTypes =
-    ToggleIsInitializedType
-    | SetEventsListType
-    | TogglePlayType
-    | SetTimestampType
-    | SetIsForcedTimestampType
-    | SetActiveEventsType;*!/*/
-
 type ActionsTypes = InferActionsTypes<typeof actions>;
-
-/*export const toggleIsInitialized = (isInitialized: boolean) => ({type: TOGGLE_IS_INITIALIZED, isInitialized: isInitialized});
-export const setEventsList = (eventsListData: Array<EventType>) => ({type: SET_EVENTS_LIST, eventsListData});
-export const togglePlay = () => ({type: TOGGLE_PLAY});
-export const setTimestamp = (timestamp: number) => ({type: SET_TIMESTAMP, timestamp});
-export const setIsForcedTimestamp = (isForced: boolean) => ({type: SET_IS_FORCED_TIMESTAMP, isForced});
-export const setActiveEvents = () => ({type: SET_ACTIVE_EVENTS});*/
 
 export const initializeApp = (): ThunkType => async (dispatch) => {
     let data = await getEventsList();
@@ -108,14 +86,14 @@ export const initializeApp = (): ThunkType => async (dispatch) => {
     dispatch(actions.setEventsList(data));
 }
 
-export const updateTimestamp = (timestamp: number, isForced = false): ThunkType => (dispatch) => {
+export const updateTimestamp = (timestamp: number, isForced: boolean = false): ThunkType => (dispatch) => {
     dispatch(actions.setTimestamp(timestamp));
     dispatch(actions.setActiveEvents());
     dispatch(actions.setIsForcedTimestamp(isForced));
 };
 
 export type DispatchType = Dispatch<ActionsTypes>;
-type ThunkType = ThunkAction<void, AppStateType, unknown, ActionsTypes>;
+export type ThunkType = ThunkAction<void, AppStateType, unknown, ActionsTypes>;
 
 export type initialStateType = typeof initialState;
 

@@ -1,13 +1,11 @@
-import React, {FC} from "react";
+import React, {FC, ReactElement} from "react";
 import s from './events-list.module.css';
 
-const EventsList: FC<PropsType> = (props) => {
-    return (
-        <div className={s.eventsListTable}>{props.eventsList}</div>
-    )
-}
+const EventsList: FC<PropsType> = (props) => (
+    <div className={s.eventsListTable}>{props.eventsList}</div>
+);
 export default EventsList;
 
 type PropsType = {
-    eventsList: Array<any>
+    eventsList: Array<ReactElement>
 };
