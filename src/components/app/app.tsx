@@ -3,7 +3,7 @@ import './app.css';
 import EventsListContainer from "../events-list/events-list-container";
 import VideoPlayerContainer from "../video-player/video-player-container";
 import {connect} from "react-redux";
-import {initializeApp} from "../../redux/app-reducer";
+import {initializeApp} from "../../redux/app-reducer-js";
 import Loader from "../loader/loader";
 import {AppStateType} from "../../redux/redux-store";
 

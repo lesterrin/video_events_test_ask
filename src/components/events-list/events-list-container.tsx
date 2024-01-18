@@ -3,7 +3,7 @@ import EventsList from "./events-list";
 import {connect} from "react-redux";
 import EventsListItem from "./events-list-item/events-list-item";
 import {getEventsList} from "../../redux/app-selectors";
-import {updateTimestamp} from "../../redux/app-reducer";
+import {updateTimestamp} from "../../redux/app-reducer-js";
 import {AppStateType} from "../../redux/redux-store";
 import {EventZoneType} from "../../types";
 
