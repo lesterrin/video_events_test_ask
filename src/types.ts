@@ -1,5 +1,3 @@
-export type EventsListType = Array<EventType>;
-
 export type EventType = {
     duration: number,
     timestamp: number,

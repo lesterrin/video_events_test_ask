@@ -1,14 +1,31 @@
 import React, {createElement, FC} from "react";
 import VideoPlayer from "./video-player";
-import {connect} from "react-redux";
-import {updateTimestamp,togglePlay,setActiveEvents} from "../../redux/app-reducer-js";
+import {updateTimestamp,togglePlay,setActiveEvents} from "../../redux/app-reducer";
 import s from "./video-player.module.css";
-import {AppStateType} from "../../redux/redux-store";
+import {useAppDispatch, useAppSelector} from "../../redux/redux-store";
 import {EventType} from "../../types";
+import {
+    activeEventsSelector,
+    isForcedTimestampSelector,
+    isPlayedSelector,
+    timestampSelector
+} from "../../redux/app-selectors";
 
-const VideoPlayerContainer: FC<PropsType> = (props) => {
+const VideoPlayerContainer: FC = () => {
 
-    const activeEventsElements = props.activeEvents.map((e, i) => createElement('div', {
+    const dispatch = useAppDispatch();
+
+    const addProps: AddPropsType = {
+        isPlayed: useAppSelector(isPlayedSelector),
+        isForcedTimestamp: useAppSelector(isForcedTimestampSelector),
+        timestamp: useAppSelector(timestampSelector),
+        activeEvents: useAppSelector(activeEventsSelector),
+        togglePlay: () => dispatch(togglePlay()),
+        setTimestamp: (timestamp) => dispatch(updateTimestamp(timestamp)),
+        setActiveEvents: () => dispatch(setActiveEvents)
+    };
+
+    const activeEventsElements = addProps.activeEvents.map((e, i) => createElement('div', {
         className: s.rect,
         key: `aet${i}`,
         style: {
@@ -20,37 +37,17 @@ const VideoPlayerContainer: FC<PropsType> = (props) => {
     }));
 
     return (
-        <VideoPlayer {...props} activeEventsElements={activeEventsElements}/>
+        <VideoPlayer {...addProps} activeEventsElements = {activeEventsElements}/>
     );
 }
 
+export default VideoPlayerContainer;
 
-const mapStateToProps = (state: AppStateType): MapStateToPropsType => {
-    return {
-        isPlayed: state.app.isPlayed,
-        isForcedTimestamp: state.app.isForcedTimestamp,
-        timestamp: state.app.timestamp,
-        activeEvents: state.app.activeEvents
-    };
-};
-
-export default connect(mapStateToProps, {
-    togglePlay: togglePlay,
-    setTimestamp: updateTimestamp,
-    setActiveEvents: setActiveEvents
-// @ts-ignore временно
-})(VideoPlayerContainer);
-
-type PropsType = MapStateToPropsType & MapDispatchToPropsType;
-
-type MapStateToPropsType = {
+type AddPropsType = {
     isPlayed: boolean,
     isForcedTimestamp: boolean,
     timestamp: number,
-    activeEvents: Array<EventType>
-}
-
-type MapDispatchToPropsType = {
+    activeEvents: Array<EventType>,
     togglePlay: () => void,
     setTimestamp: (timestamp: number) => void,
     setActiveEvents: () => void

@@ -2,14 +2,19 @@ import React, {FC, useEffect} from 'react';
 import './app.css';
 import EventsListContainer from "../events-list/events-list-container";
 import VideoPlayerContainer from "../video-player/video-player-container";
-import {connect} from "react-redux";
-import {initializeApp} from "../../redux/app-reducer-js";
+import {initializeApp} from "../../redux/app-reducer";
 import Loader from "../loader/loader";
-import {AppStateType} from "../../redux/redux-store";
+import {useAppDispatch, useAppSelector} from "../../redux/redux-store";
+import {isInitializedSelector} from "../../redux/app-selectors";
 
-const App: FC<PropsType> = ({isInitialized, initializeApp}) => {
+const App: FC = () => {
+
+    const isInitialized = useAppSelector(isInitializedSelector);
+    const dispatch = useAppDispatch();
+
     useEffect(() => {
-        initializeApp();
+        dispatch(initializeApp());
+
     }, []);
 
     if (!isInitialized) {
@@ -23,20 +28,5 @@ const App: FC<PropsType> = ({isInitialized, initializeApp}) => {
         );
     }
 }
-const mapStateToProps = (state: AppStateType): MapStateToPropsType => ({
-    isInitialized: state.app.isInitialized
-});
 
-const AppContainer = connect(mapStateToProps, {initializeApp})(App);
-
-export default AppContainer;
-
-type PropsType = MapStateToPropsType & MapDispatchToPropsType;
-
-type MapStateToPropsType = {
-    isInitialized: boolean
-};
-
-type MapDispatchToPropsType = {
-    initializeApp: ()=> void
-};
+export default App;
